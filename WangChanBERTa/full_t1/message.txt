@@ -1,0 +1,180 @@
+import React, { useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { Stack, IconButton, Tooltip } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { logo } from "./images/index";
+import { styles } from "./styles";
+import {
+  homeUrl,
+  dashBoardUrl,
+  assignNEUrl,
+  editAssignNEUrl,
+} from "./constants";
+
+const Navbar = (props) => {
+  const location = useLocation();
+  const [navbar, setNavbar] = useState(false);
+  const [data, setData] = useState(props.data);
+
+  const handleLogout = () => {
+    props.logout();
+    if (data) {
+      localStorage.clear();
+      setData(null);
+    }
+    console.log("log out clicked!");
+  };
+  const activelink = "py-1.5 border-greendataxet border-b-4";
+  const normallink = `${styles.navButton}`;
+
+  return (
+    <>
+      <Stack
+        direction="row"
+        alignItems="center"
+        px={2}
+        py={0.5}
+        sx={{
+          position: "sticky",
+          top: 0,
+          justifyContent: "space-between",
+          boxShadow: "2px 1px 10px 1px rgba(0, 0, 0, 0.24)",
+        }}
+      >
+        <nav className="w-full">
+          <div className="justify-between mx-auto md:items-center md:flex -mb-1">
+            <div>
+              <div className="flex items-center justify-between md:block pr-7">
+                <NavLink
+                  exact
+                  to={homeUrl}
+                  className="flex justify-start align-middle h-7 "
+                >
+                  <img src={logo} alt="logo" />
+                </NavLink>
+                <div className="flex justify-end md:hidden">
+                  <button
+                    className="text-gray-700 rounded-md outline-none ease-in-out -mr-6 "
+                    onClick={() => setNavbar(!navbar)}
+                  >
+                    {navbar ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-6 h-6 text-secondary"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-6 h-6 text-black"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 6h16M4 12h16M4 18h16"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className={`flex-1 justify-self-center items-center md:block md:pb-0 md:mt-0 ${
+                navbar ? "block -mb-1.5" : "hidden"
+              }`}
+            >
+              <ul className="flex items-center md:flex md:space-x-6 md:space-y-0">
+                <NavLink
+                  exact
+                  to={homeUrl}
+                  className={`${normallink} ${
+                    location.pathname === homeUrl ? activelink : ""
+                  }`}
+                  onClick={(event) => {
+                    if (
+                      props.editing &&
+                      location.pathname === editAssignNEUrl
+                    ) {
+                      event.preventDefault();
+                      window.alert("Please submit document !!");
+                    }
+                  }}
+                >
+                  HOME
+                </NavLink>
+
+                <NavLink
+                  exact
+                  to={assignNEUrl}
+                  className={`${normallink} ${
+                    location.pathname === assignNEUrl ? activelink : ""
+                  }`}
+                  onClick={(event) => {
+                    if (
+                      props.editing &&
+                      location.pathname === editAssignNEUrl
+                    ) {
+                      event.preventDefault();
+                      window.alert("Please submit document !!");
+                    }
+                  }}
+                >
+                  ASSIGN NE
+                </NavLink>
+
+                <NavLink
+                  exact
+                  to={dashBoardUrl}
+                  className={`${normallink} ${
+                    location.pathname === dashBoardUrl ? activelink : ""
+                  }`}
+                  onClick={(event) => {
+                    if (
+                      props.editing &&
+                      location.pathname === editAssignNEUrl
+                    ) {
+                      event.preventDefault();
+                      window.alert("Please submit document !!");
+                    }
+                  }}
+                >
+                  DASHBOARD
+                </NavLink>
+                <div className="flex-1 justify-self-center items-center">
+                  <div>
+                    <ul className="flex items-center justify-end">
+                      <div className="flex pr-2 text-sm">{props.email}</div>
+                      <Tooltip title="Log out">
+                        <Link to="/login">
+                          {/* <IconButton> */}
+                          <IconButton onClick={handleLogout}>
+                            <LogoutIcon color="black" />
+                          </IconButton>
+                        </Link>
+                      </Tooltip>
+                    </ul>
+                  </div>
+                </div>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </Stack>
+    </>
+  );
+};
+
+export default Navbar;
